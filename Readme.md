@@ -215,3 +215,5 @@ Cost-aware DevOps architecture
 
 Rahul Hari Kumar
 DevOps Engineer | AWS | CI/CD | Docker | Jenkins
+# devops-ci-cd-staticwebsite
+# devops-ci-cd-staticwebsite
