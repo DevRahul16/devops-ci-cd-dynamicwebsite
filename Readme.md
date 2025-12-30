@@ -1,163 +1,217 @@
-End-to-End CI/CD DevOps Project using AWS, Jenkins, Docker, Kubernetes, Prometheus & Grafana
+🚀 End-to-End CI/CD DevOps Project (AWS)
 📌 Project Overview
 
-This project demonstrates a complete end-to-end DevOps CI/CD pipeline where application code changes pushed to GitHub automatically trigger a pipeline that builds, deploys, and updates the application on a Kubernetes cluster hosted on AWS.
+This project demonstrates a real-world, end-to-end CI/CD pipeline built entirely on the AWS Free Tier.
+Any code change pushed to GitHub is automatically built and deployed to a live application using Jenkins, Docker, and Docker Compose.
 
-The entire workflow is fully automated, following real-world industry practices used in production environments.
+The project focuses on:
+
+Automation
+
+Cost efficiency
+
+Real DevOps best practices
 
 🎯 Project Objective
 
-Automate application deployment so that any code change pushed to GitHub is automatically built, deployed, and monitored without manual intervention.
+Automate application deployment
 
-🏗️ High-Level Architecture
+Eliminate manual server updates
 
-Flow:
+Practice production-style CI/CD
 
-Developer pushes code to GitHub
+Keep everything 100% AWS Free Tier
 
-GitHub Webhook triggers Jenkins pipeline
-
-Jenkins builds Docker image
-
-Docker image is pushed to Docker Hub
-
-Kubernetes pulls the new image and updates the running application
-
-Prometheus monitors the application and cluster
-
-Grafana visualizes metrics on dashboards
+🏗️ Architecture Overview
+Developer (GitHub)
+        |
+        |  git push
+        v
+Jenkins (EC2)
+        |
+        |  CI/CD Pipeline
+        v
+Docker & Docker Compose
+        |
+        v
+Live Application (Port 80)
+        |
+        v
+Route 53 Domain
 
 🧰 Technologies Used
 
-Linux – Base operating system
+Linux (Ubuntu)
 
-AWS – Cloud infrastructure
+AWS EC2
 
-Git & GitHub – Source code management
+Git & GitHub
 
-Terraform – Infrastructure as Code (IaC)
-
-Ansible – Server configuration management
+Ansible – Configuration management
 
 Jenkins – CI/CD automation
 
-Docker – Containerization
+Docker
 
-Kubernetes (EKS) – Container orchestration
+Docker Compose
 
-Prometheus – Monitoring
+AWS Route 53 – DNS
 
-Grafana – Visualization & dashboards
+Nginx – Web server (containerized)
 
 📁 Project Structure
-devops-ci-cd-k8s-project/
-│
-├── README.md
-│
-├── terraform/
-│   ├── main.tf
-│   ├── variables.tf
-│   └── outputs.tf
+devops-ci-cd-project/
 │
 ├── ansible/
 │   ├── inventory
-│   └── jenkins-setup.yml
+│   ├── jenkins-setup.yml
+│   └── docker-setup.yml
 │
 ├── app/
 │   ├── Dockerfile
 │   └── index.html
 │
-├── jenkins/
-│   └── Jenkinsfile
-│
-├── k8s/
-│   ├── deployment.yml
-│   └── service.yml
-│
-└── monitoring/
-    ├── prometheus.yml
-    └── grafana-notes.md
+├── docker-compose.yml
+├── Jenkinsfile
+├── .gitignore
+└── README.md
 
-🔄 CI/CD Pipeline Workflow
+🔄 CI/CD Workflow
 
-Code pushed to GitHub
+Developer pushes code to GitHub
 
-Jenkins pipeline starts automatically
+Jenkins pipeline is triggered automatically
 
-Docker image is built and pushed to Docker Hub
+Jenkins builds Docker image
 
-Kubernetes deployment is updated
+Docker Compose deploys the container
 
-Application is updated with zero downtime
+Application is updated without manual intervention
 
-Prometheus scrapes metrics
-
-Grafana displays real-time dashboards
+Website is accessible via Route 53 domain
 
 🐳 Application & Docker
+app/index.html
+<h1>🚀 CI/CD Auto Deployment Confirmed</h1>
 
-index.html
-
-<h1>🚀 Deployed Automatically via Jenkins CI/CD Pipeline</h1>
-
-
-Dockerfile
-
+app/Dockerfile
 FROM nginx:alpine
 COPY index.html /usr/share/nginx/html/index.html
 
-☸️ Kubernetes Deployment
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: web-app
-spec:
-  replicas: 2
-  selector:
-    matchLabels:
-      app: web
-  template:
-    metadata:
-      labels:
-        app: web
-    spec:
-      containers:
-      - name: web
-        image: yourdockerhub/webapp:latest
-        ports:
-        - containerPort: 80
+🧩 Docker Compose (Kubernetes Alternative)
+docker-compose.yml
+version: "3"
+services:
+  web:
+    build: ./app
+    ports:
+      - "80:80"
 
-🧪 Monitoring
 
-Prometheus collects metrics from Kubernetes
+✔ Replaces Kubernetes
+✔ Zero cost
+✔ Simple & production-ready for small workloads
 
-Grafana displays:
+⚙️ Jenkins Pipeline
+Jenkinsfile
+pipeline {
+    agent any
 
-CPU usage
+    stages {
+        stage('Build & Deploy using Docker Compose') {
+            steps {
+                sh '''
+                docker-compose down || true
+                docker-compose up -d --build
+                '''
+            }
+        }
+    }
+}
 
-Memory usage
+🛠️ Ansible Automation
+Jenkins Setup
 
-Pod status
+Installs Java
 
-Node health
+Installs Jenkins
 
-✅ Key Highlights
+Starts Jenkins service
 
-Fully automated CI/CD pipeline
+Docker Setup
 
-Infrastructure created using Terraform
+Installs Docker & Docker Compose
 
-Configuration managed using Ansible
+Adds Jenkins user to Docker group
 
-Zero-downtime Kubernetes deployments
+Enables Docker service
 
-Production-grade monitoring with Prometheus & Grafana
+✔ Fully automated server setup
+✔ Repeatable and consistent
 
-📌 Conclusion
+🌍 Domain Setup with Route 53
 
-This project demonstrates how modern DevOps teams design, automate, deploy, and monitor applications using cloud-native tools. It closely replicates real-world production CI/CD workflows.
+Steps followed:
 
-🚀 Author
+Created a Public Hosted Zone in Route 53
+
+Updated domain nameservers (from registrar) to Route 53
+
+Created A record pointing domain → EC2 Public IP
+
+Website accessible via:
+
+http://yourdomain.com
+
+🧪 Verification & Testing
+Check running containers
+docker ps
+
+Test application
+curl localhost
+
+Browser access
+http://yourdomain.com
+
+🔁 Auto-Deployment Test
+
+Update index.html
+
+Commit & push to GitHub
+
+Jenkins pipeline runs automatically
+
+Website updates instantly
+
+✔ CI/CD confirmed
+
+💰 Cost Optimization
+
+Uses only one EC2 Free Tier instance
+
+No Load Balancers
+
+No EKS / RDS
+
+Docker Compose instead of Kubernetes
+
+💡 Total cost: $0
+
+🧠 Key Learnings
+
+CI/CD pipeline design
+
+Jenkins + Docker integration
+
+Linux user & permission management
+
+Infrastructure automation using Ansible
+
+DNS management using Route 53
+
+Cost-aware DevOps architecture
+
+👨‍💻 Author
 
 Rahul Hari Kumar
-DevOps | AWS | Kubernetes | CI/CD
+DevOps Engineer | AWS | CI/CD | Docker | Jenkins
