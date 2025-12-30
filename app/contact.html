@@ -76,7 +76,7 @@
     <a href="contact.html">Contact</a>
   </nav>
 
-  <form>
+  <form onsubmit="sendMessage(event)">
     <h2>Contact Chelsea FC</h2>
     <input type="text" placeholder="Your Name" required><br>
     <input type="email" placeholder="Your Email" required><br>
@@ -85,5 +85,24 @@
   </form>
 
   <footer>© 2025-2026 Chelsea-India FC Fan Page | Contact Us</footer>
+
+<script>
+function sendMessage(e) {
+  e.preventDefault();
+
+  fetch('/api/contact', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      name: document.querySelector('input[type=text]').value,
+      email: document.querySelector('input[type=email]').value,
+      message: document.querySelector('textarea').value
+    })
+  })
+  .then(res => res.json())
+  .then(data => alert(data.message));
+}
+</script>
+
 </body>
 </html>
